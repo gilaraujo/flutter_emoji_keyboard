@@ -21,6 +21,7 @@ import 'emoji_searching.dart';
 class EmojiKeyboard extends StatefulWidget {
   final TextEditingController? bromotionController;
   final Function? onEmojiPressed;
+  final VoidCallback? onBackPressed;
   final double emojiKeyboardHeight;
   final bool showEmojiKeyboard;
   final bool darkMode;
@@ -29,6 +30,7 @@ class EmojiKeyboard extends StatefulWidget {
       {Key? key,
       this.bromotionController,
       this.onEmojiPressed,
+      this.onBackPressed,
       this.emojiKeyboardHeight = 350,
       this.showEmojiKeyboard = true,
       this.darkMode = false})
@@ -64,6 +66,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
 
   TextEditingController? bromotionController;
   Function? onEmojiPressed;
+  VoidCallback? onBackPressed;
 
   bool showBottomBar = true;
   bool searchMode = false;
@@ -74,6 +77,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
   void initState() {
     this.bromotionController = widget.bromotionController;
     this.onEmojiPressed = widget.onEmojiPressed;
+    this.onBackPressed = widget.onBackPressed;
     this.emojiKeyboardHeight = widget.emojiKeyboardHeight;
     this.darkMode = widget.darkMode;
 
@@ -361,6 +365,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
             BottomBar(
                 key: bottomBarStateKey,
                 bromotionController: bromotionController,
+                onBackPressed: onBackPressed,
                 emojiSearch: emojiSearch,
                 darkMode: darkMode),
           ])

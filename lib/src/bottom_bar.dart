@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 /// This is the Bottom Bar of the Emoji Keyboard
 class BottomBar extends StatefulWidget {
   final TextEditingController? bromotionController;
+  final VoidCallback? onBackPressed;
   final Function emojiSearch;
-  final bool darkMode;
+  final bool? showSpaceBar;
+  final bool? darkMode;
 
   BottomBar(
       {Key? key,
       this.bromotionController,
       required this.emojiSearch,
-      required this.darkMode})
+      this.showSpaceBar,
+      this.onBackPressed,
+      this.darkMode})
       : super(key: key);
 
   @override
@@ -25,12 +29,14 @@ class BottomBar extends StatefulWidget {
 /// search for a particular emoji using a regular keyboard.
 class BottomBarState extends State<BottomBar> {
   TextEditingController? bromotionController;
+  VoidCallback? onBackPressed;
   final double bottomBarHeight = 50;
   bool showBottomBar = true;
 
   @override
   void initState() {
     this.bromotionController = widget.bromotionController;
+    this.onBackPressed = widget.onBackPressed;
     super.initState();
   }
 
@@ -44,6 +50,9 @@ class BottomBarState extends State<BottomBar> {
   /// if the user has the cursor in the beginning or nothing is in the
   /// Textfield nothing happens
   void onBackspace() {
+    if (onBackPressed != null) {
+      onBackPressed!();
+    }
     if (bromotionController != null) {
       final text = bromotionController!.text;
       final textSelection = bromotionController!.selection;
@@ -136,6 +145,7 @@ class BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    double width = widget.showSpaceBar == true ? MediaQuery.of(context).size.width / 8 : MediaQuery.of(context).size.width / 4;
     return Positioned(
         bottom: 0.0,
         right: 0.0,
@@ -146,7 +156,7 @@ class BottomBarState extends State<BottomBar> {
           width: MediaQuery.of(context).size.width,
           duration: new Duration(seconds: 1),
           child: Container(
-            color: widget.darkMode ? Color(0xff171717) : Color(0xffdbdbdb),
+            color: widget.darkMode == true ? Color(0xff171717) : Color(0xffdbdbdb),
             alignment: Alignment.bottomCenter,
             child: SizedBox(
               child: Row(
@@ -154,15 +164,15 @@ class BottomBarState extends State<BottomBar> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                      width: MediaQuery.of(context).size.width / 8,
+                      width: width,
                       height: MediaQuery.of(context).size.width / 8,
                       child: TextButton(
                           onPressed: () {
                             widget.emojiSearch();
                           },
                           child: Icon(Icons.search))),
-                  SizedBox(
-                      width: (MediaQuery.of(context).size.width / 8) * 3,
+                  if (widget.showSpaceBar == true) SizedBox(
+                      width: width * 3,
                       height: MediaQuery.of(context).size.width / 8,
                       child: TextButton(
                           onPressed: () {
@@ -170,7 +180,7 @@ class BottomBarState extends State<BottomBar> {
                           },
                           child: Icon(Icons.space_bar))),
                   SizedBox(
-                      width: MediaQuery.of(context).size.width / 8,
+                      width: width,
                       height: MediaQuery.of(context).size.width / 8,
                       child: TextButton(
                           onPressed: () {

@@ -35,6 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late bool showEmojiKeyboard;
   final TextEditingController controller = TextEditingController();
   final Function onEmojiPressed = (val) { };
+  final VoidCallback onBackPressed = () { };
 
   @override
   void initState() {
@@ -95,6 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: EmojiKeyboard(
                 bromotionController: controller,
                 onEmojiPressed: onEmojiPressed,
+                onBackPressed: onBackPressed,
                 emojiKeyboardHeight: 420,
                 showEmojiKeyboard: showEmojiKeyboard,
                 darkMode: true
