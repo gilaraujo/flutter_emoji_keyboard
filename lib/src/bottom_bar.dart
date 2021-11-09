@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 /// This is the Bottom Bar of the Emoji Keyboard
 class BottomBar extends StatefulWidget {
-  final TextEditingController bromotionController;
+  final TextEditingController? bromotionController;
   final Function emojiSearch;
   final bool darkMode;
 
   BottomBar(
       {Key? key,
-      required this.bromotionController,
+      this.bromotionController,
       required this.emojiSearch,
       required this.darkMode})
       : super(key: key);
@@ -44,73 +44,81 @@ class BottomBarState extends State<BottomBar> {
   /// if the user has the cursor in the beginning or nothing is in the
   /// Textfield nothing happens
   void onBackspace() {
-    final text = bromotionController!.text;
-    final textSelection = bromotionController!.selection;
-    final selectionLength = textSelection.end - textSelection.start;
-    if (selectionLength > 0) {
+    if (bromotionController != null) {
+      final text = bromotionController!.text;
+      final textSelection = bromotionController!.selection;
+      final selectionLength = textSelection.end - textSelection.start;
+      if (selectionLength > 0) {
+        final newText = text.replaceRange(
+          textSelection.start,
+          textSelection.end,
+          '',
+        );
+        bromotionController!.text = newText;
+        bromotionController!.selection = textSelection.copyWith(
+          baseOffset: textSelection.start,
+          extentOffset: textSelection.start,
+        );
+        return;
+      }
+
+      if (textSelection.start == 0) {
+        if (text.length == 0) {
+          return;
+        } else {
+          // Eagerly selects all but the last count characters
+          String finalCharacter = text.characters
+              .skipLast(1)
+              .string;
+          // So if the result is empty there was only 1 character
+          if (finalCharacter == "") {
+            // If there was only 1 character we remove that one.
+            bromotionController!.text = "";
+            bromotionController!.selection = textSelection.copyWith(
+              baseOffset: 0,
+              extentOffset: 0,
+            );
+            return;
+          }
+        }
+      }
+
+      String firstSection = text.substring(0, textSelection.start);
+      String newFirstSection = firstSection.characters
+          .skipLast(1)
+          .string;
+      final offset = firstSection.length - newFirstSection.length;
+      final newStart = textSelection.start - offset;
+      final newEnd = textSelection.start;
       final newText = text.replaceRange(
-        textSelection.start,
-        textSelection.end,
+        newStart,
+        newEnd,
         '',
       );
       bromotionController!.text = newText;
       bromotionController!.selection = textSelection.copyWith(
-        baseOffset: textSelection.start,
-        extentOffset: textSelection.start,
+        baseOffset: newStart,
+        extentOffset: newStart,
       );
-      return;
     }
-
-    if (textSelection.start == 0) {
-      if (text.length == 0) {
-        return;
-      } else {
-        // Eagerly selects all but the last count characters
-        String finalCharacter = text.characters.skipLast(1).string;
-        // So if the result is empty there was only 1 character
-        if (finalCharacter == "") {
-          // If there was only 1 character we remove that one.
-          bromotionController!.text = "";
-          bromotionController!.selection = textSelection.copyWith(
-            baseOffset: 0,
-            extentOffset: 0,
-          );
-          return;
-        }
-      }
-    }
-
-    String firstSection = text.substring(0, textSelection.start);
-    String newFirstSection = firstSection.characters.skipLast(1).string;
-    final offset = firstSection.length - newFirstSection.length;
-    final newStart = textSelection.start - offset;
-    final newEnd = textSelection.start;
-    final newText = text.replaceRange(
-      newStart,
-      newEnd,
-      '',
-    );
-    bromotionController!.text = newText;
-    bromotionController!.selection = textSelection.copyWith(
-      baseOffset: newStart,
-      extentOffset: newStart,
-    );
   }
 
   /// If the user presses the Spacebar it will simply add a space
   void onSpacebar() {
-    final text = bromotionController!.text;
-    final textSelection = bromotionController!.selection;
-    final newText = text.replaceRange(
-      textSelection.start,
-      textSelection.end,
-      " ",
-    );
-    bromotionController!.text = newText;
-    bromotionController!.selection = textSelection.copyWith(
-      baseOffset: textSelection.start + 1,
-      extentOffset: textSelection.start + 1,
-    );
+    if (bromotionController != null) {
+      final text = bromotionController!.text;
+      final textSelection = bromotionController!.selection;
+      final newText = text.replaceRange(
+        textSelection.start,
+        textSelection.end,
+        " ",
+      );
+      bromotionController!.text = newText;
+      bromotionController!.selection = textSelection.copyWith(
+        baseOffset: textSelection.start + 1,
+        extentOffset: textSelection.start + 1,
+      );
+    }
   }
 
   /// If the user scrolls down the bottom bar should be hidden.

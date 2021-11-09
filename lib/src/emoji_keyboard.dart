@@ -19,14 +19,16 @@ import 'emoji_searching.dart';
 ///   - emoji pages
 ///     These hold all the emojis in 9 separate listviews.
 class EmojiKeyboard extends StatefulWidget {
-  final TextEditingController bromotionController;
+  final TextEditingController? bromotionController;
+  final Function? onEmojiPressed;
   final double emojiKeyboardHeight;
   final bool showEmojiKeyboard;
   final bool darkMode;
 
   EmojiKeyboard(
       {Key? key,
-      required this.bromotionController,
+      this.bromotionController,
+      this.onEmojiPressed,
       this.emojiKeyboardHeight = 350,
       this.showEmojiKeyboard = true,
       this.darkMode = false})
@@ -61,6 +63,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
   double emojiKeyboardHeight = 350;
 
   TextEditingController? bromotionController;
+  Function? onEmojiPressed;
 
   bool showBottomBar = true;
   bool searchMode = false;
@@ -70,6 +73,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
   @override
   void initState() {
     this.bromotionController = widget.bromotionController;
+    this.onEmojiPressed = widget.onEmojiPressed;
     this.emojiKeyboardHeight = widget.emojiKeyboardHeight;
     this.darkMode = widget.darkMode;
 
@@ -159,7 +163,9 @@ class EmojiBoard extends State<EmojiKeyboard> {
     setState(() {
       this.searchMode = true;
     });
-    rememberPosition = bromotionController!.selection;
+    if (bromotionController != null) {
+      rememberPosition = bromotionController!.selection;
+    }
     focusSearchEmoji.requestFocus();
   }
 
@@ -242,19 +248,24 @@ class EmojiBoard extends State<EmojiKeyboard> {
   /// It will then go out of search mode and back to the emoji keyboard.
   /// The emoji is added where the cursor was when the user pressed search.
   void insertTextSearch(String myText) {
-    final text = bromotionController!.text;
-    final textSelection = rememberPosition;
-    final newText = text.replaceRange(
-      textSelection.start,
-      textSelection.end,
-      myText,
-    );
-    final myTextLength = myText.length;
-    bromotionController!.text = newText;
-    bromotionController!.selection = textSelection.copyWith(
-      baseOffset: textSelection.start + myTextLength,
-      extentOffset: textSelection.start + myTextLength,
-    );
+    if (bromotionController != null) {
+      final text = bromotionController!.text;
+      final textSelection = rememberPosition;
+      final newText = text.replaceRange(
+        textSelection.start,
+        textSelection.end,
+        myText,
+      );
+      final myTextLength = myText.length;
+      bromotionController!.text = newText;
+      bromotionController!.selection = textSelection.copyWith(
+        baseOffset: textSelection.start + myTextLength,
+        extentOffset: textSelection.start + myTextLength,
+      );
+    }
+    if (onEmojiPressed != null) {
+      onEmojiPressed!(myText);
+    }
   }
 
   /// This function is called when we want to see if any of the recent emojis
@@ -290,19 +301,24 @@ class EmojiBoard extends State<EmojiKeyboard> {
   void insertText(String myText) {
     addRecentEmoji(myText);
     emojiScrollShowBottomBar(true);
-    final text = bromotionController!.text;
-    final textSelection = bromotionController!.selection;
-    final newText = text.replaceRange(
-      textSelection.start,
-      textSelection.end,
-      myText,
-    );
-    final myTextLength = myText.length;
-    bromotionController!.text = newText;
-    bromotionController!.selection = textSelection.copyWith(
-      baseOffset: textSelection.start + myTextLength,
-      extentOffset: textSelection.start + myTextLength,
-    );
+    if (bromotionController != null) {
+      final text = bromotionController!.text;
+      final textSelection = bromotionController!.selection;
+      final newText = text.replaceRange(
+        textSelection.start,
+        textSelection.end,
+        myText,
+      );
+      final myTextLength = myText.length;
+      bromotionController!.text = newText;
+      bromotionController!.selection = textSelection.copyWith(
+        baseOffset: textSelection.start + myTextLength,
+        extentOffset: textSelection.start + myTextLength,
+      );
+    }
+    if (onEmojiPressed != null) {
+      onEmojiPressed!(myText);
+    }
   }
 
   bool isPortrait() {
@@ -337,14 +353,14 @@ class EmojiBoard extends State<EmojiKeyboard> {
             EmojiPage(
                 key: emojiPageStateKey,
                 emojiKeyboardHeight: isPortrait() ? emojiKeyboardHeight : 150,
-                bromotionController: bromotionController!,
+                bromotionController: bromotionController,
                 emojiScrollShowBottomBar: emojiScrollShowBottomBar,
                 insertText: insertText,
                 recent: recent,
                 switchedPage: switchedPage),
             BottomBar(
                 key: bottomBarStateKey,
-                bromotionController: bromotionController!,
+                bromotionController: bromotionController,
                 emojiSearch: emojiSearch,
                 darkMode: darkMode),
           ])

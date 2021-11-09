@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -32,8 +32,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  bool showEmojiKeyboard;
+  late bool showEmojiKeyboard;
   final TextEditingController controller = TextEditingController();
+  final Function onEmojiPressed = (val) { };
 
   @override
   void initState() {
@@ -93,6 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
               alignment: Alignment.bottomCenter,
               child: EmojiKeyboard(
                 bromotionController: controller,
+                onEmojiPressed: onEmojiPressed,
                 emojiKeyboardHeight: 420,
                 showEmojiKeyboard: showEmojiKeyboard,
                 darkMode: true
