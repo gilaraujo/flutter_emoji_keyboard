@@ -24,6 +24,7 @@ class EmojiKeyboard extends StatefulWidget {
   final VoidCallback? onBackPressed;
   final double emojiKeyboardHeight;
   final bool showEmojiKeyboard;
+  final bool showRecent;
   final bool darkMode;
 
   EmojiKeyboard(
@@ -33,6 +34,7 @@ class EmojiKeyboard extends StatefulWidget {
       this.onBackPressed,
       this.emojiKeyboardHeight = 350,
       this.showEmojiKeyboard = true,
+      this.showRecent = true,
       this.darkMode = false})
       : super(key: key);
 
@@ -70,6 +72,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
 
   bool showBottomBar = true;
   bool searchMode = false;
+  bool showRecent = true;
   bool darkMode = false;
   List<String> recent = [];
 
@@ -79,6 +82,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
     this.onEmojiPressed = widget.onEmojiPressed;
     this.onBackPressed = widget.onBackPressed;
     this.emojiKeyboardHeight = widget.emojiKeyboardHeight;
+    this.showRecent = widget.showRecent;
     this.darkMode = widget.darkMode;
 
     getRecentEmoji().then((value) {
@@ -352,6 +356,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
           CategoryBar(
               key: categoryBarStateKey,
               categoryHandler: categoryHandler,
+              showRecent: showRecent,
               darkMode: darkMode),
           Stack(children: [
             EmojiPage(
@@ -360,7 +365,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
                 bromotionController: bromotionController,
                 emojiScrollShowBottomBar: emojiScrollShowBottomBar,
                 insertText: insertText,
-                recent: recent,
+                recent: showRecent ? recent : null,
                 switchedPage: switchedPage),
             BottomBar(
                 key: bottomBarStateKey,

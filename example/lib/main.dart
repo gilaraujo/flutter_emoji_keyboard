@@ -99,6 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onBackPressed: onBackPressed,
                 emojiKeyboardHeight: 420,
                 showEmojiKeyboard: showEmojiKeyboard,
+                showRecent: false,
                 darkMode: true
               ),
             ),
