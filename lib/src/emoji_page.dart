@@ -58,7 +58,7 @@ class EmojiPageState extends State<EmojiPage> {
   List symbols = [];
   List flags = [];
 
-  PageController pageController = new PageController(initialPage: 1);
+  PageController pageController = new PageController(initialPage: 0);
   TextEditingController? bromotionController;
 
   bool showBottomBar = true;

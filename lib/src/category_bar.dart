@@ -22,7 +22,7 @@ class CategoryBar extends StatefulWidget {
 /// A difference in styling will indicate which category is selected.
 /// The icons for the categories are also defined here.
 class CategoryBarState extends State<CategoryBar> {
-  int categorySelected = 1;
+  int categorySelected = 0;
   double emojiCategoryHeight = 50;
 
   @override
