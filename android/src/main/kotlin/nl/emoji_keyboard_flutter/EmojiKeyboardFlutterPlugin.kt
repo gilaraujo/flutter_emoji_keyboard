@@ -1,6 +1,7 @@
 package nl.emoji_keyboard_flutter
 
-import android.graphics.Paint
+import android.graphics.Paint;
+import androidx.core.graphics.PaintCompat;
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -8,7 +9,6 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry.Registrar
 
 /** EmojiKeyboardFlutterPlugin */
 class EmojiKeyboardFlutterPlugin: FlutterPlugin, MethodCallHandler {
@@ -29,7 +29,7 @@ class EmojiKeyboardFlutterPlugin: FlutterPlugin, MethodCallHandler {
       val emojisAvailable: List<String>? = call.argument<List<String>>("emojis")
       val available: MutableList<String> = mutableListOf()
       for (item: String in emojisAvailable!!) {
-        if (paint.hasGlyph(item)) {
+        if (PaintCompat.hasGlyph(paint, item)) {
           available.add(item)
         }
       }
