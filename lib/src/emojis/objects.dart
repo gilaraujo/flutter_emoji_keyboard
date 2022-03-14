@@ -176,7 +176,7 @@ List objectsList = [
   ['Water Pistol', '🔫'],
   ['Boomerang', '🪃'],
   ['Shield', '🛡️'],
-  ['Carpentry Saw', '🪚'],
+  // ['Carpentry Saw', '🪚'],
   ['Wrench', '🔧'],
   ['Screwdriver', '🪛'],
   ['Nut and Bolt', '🔩'],
