@@ -97,7 +97,7 @@ class EmojiPageState extends State<EmojiPage> {
   /// For Iphone the user is forced to update if an update is out so we don't
   /// need to do a similar call for Iphones.
   isAvailable() {
-    if (kIsWeb || Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       Future.wait([
         getAvailableSmileys(),
         getAvailableAnimals(),
