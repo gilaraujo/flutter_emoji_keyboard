@@ -136,7 +136,7 @@ List animalsList = [
   ['Seedling', '🌱'],
   ['Potted Plant', '🪴'],
   ['Evergreen Tree', '🌲'],
-  // ['Deciduous Tree', '🌳'],
+  ['Deciduous Tree', '🌳'],
   ['Palm Tree', '🌴'],
   ['Cactus', '🌵'],
   ['Sheaf of Rice', '🌾'],
