@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -134,7 +135,7 @@ class EmojiPageState extends State<EmojiPage> {
   /// For Iphone the user is forced to update if an update is out so we don't
   /// need to do a similar call for Iphones.
   isAvailable() {
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       Future.wait([
         getAvailableSmileys(),
         getAvailableAnimals(),
