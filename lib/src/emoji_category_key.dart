@@ -34,6 +34,7 @@ class EmojiCategoryKey extends StatelessWidget {
               MediaQuery.of(context).size.width / 9, // make it 9 buttons wide
           height: MediaQuery.of(context).size.width / 9, // make it square
           child: IconButton(
+            padding: EdgeInsets.zero,
             icon: Icon(category),
             color: active ? Colors.black : Colors.grey.shade600,
             onPressed: () {
