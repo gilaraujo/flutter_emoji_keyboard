@@ -19,17 +19,26 @@ import 'emoji_searching.dart';
 ///   - emoji pages
 ///     These hold all the emojis in 9 separate listviews.
 class EmojiKeyboard extends StatefulWidget {
-  final TextEditingController emotionController;
+  final TextEditingController? emotionController;
+  final Function? onEmojiPressed;
+  final VoidCallback? onBackPressed;
   final double emojiKeyboardHeight;
   final bool showEmojiKeyboard;
+  final bool showRecent;
   final bool darkMode;
+  final bool showSpacebar;
 
   EmojiKeyboard(
       {Key? key,
-      required this.emotionController,
+      this.emotionController,
+      this.onEmojiPressed,
+      this.onBackPressed,
       this.emojiKeyboardHeight = 350,
       this.showEmojiKeyboard = true,
-      this.darkMode = false})
+      this.showRecent = true,
+      this.darkMode = false,
+      this.showSpacebar = true,
+      })
       : super(key: key);
 
   EmojiBoard createState() => EmojiBoard();
@@ -63,10 +72,13 @@ class EmojiBoard extends State<EmojiKeyboard> {
   double emojiKeyboardHeight = 350;
 
   TextEditingController? bromotionController;
-
+  Function? onEmojiPressed;
+  VoidCallback? onBackPressed;
   bool showBottomBar = true;
   bool searchMode = false;
+  bool showRecent = true;
   bool darkMode = false;
+  bool showSpacebar = true;
   List<Emoji> recent = [];
   List<String> recentEmojis = [];
 
@@ -75,8 +87,12 @@ class EmojiBoard extends State<EmojiKeyboard> {
   @override
   void initState() {
     this.bromotionController = widget.emotionController;
+    this.onEmojiPressed = widget.onEmojiPressed;
+    this.onBackPressed = widget.onBackPressed;
     this.emojiKeyboardHeight = widget.emojiKeyboardHeight;
+    this.showRecent = widget.showRecent;
     this.darkMode = widget.darkMode;
+    this.showSpacebar = widget.showSpacebar;
 
     storage.fetchAllEmojis().then((emojis) {
       if (emojis.isNotEmpty) {
@@ -178,7 +194,9 @@ class EmojiBoard extends State<EmojiKeyboard> {
     setState(() {
       this.searchMode = true;
     });
-    rememberPosition = bromotionController!.selection;
+    if (bromotionController != null) {
+      rememberPosition = bromotionController!.selection;
+    }
     focusSearchEmoji.requestFocus();
   }
 
@@ -282,20 +300,23 @@ class EmojiBoard extends State<EmojiKeyboard> {
   /// The emoji is added where the cursor was when the user pressed search.
   void insertTextSearch(String myText) {
     addRecentEmojiSearch(myText);
-    final text = bromotionController!.text;
-    final textSelection = rememberPosition;
-    final newText = text.replaceRange(
-      textSelection.start,
-      textSelection.end,
-      myText,
-    );
-    final myTextLength = myText.length;
-    bromotionController!.text = newText;
-    bromotionController!.selection = textSelection.copyWith(
-      baseOffset: textSelection.start + myTextLength,
-      extentOffset: textSelection.start + myTextLength,
-    );
-    rememberPosition = bromotionController!.selection;
+    if (bromotionController != null) {
+      final text = bromotionController!.text;
+      final textSelection = rememberPosition;
+      final newText = text.replaceRange(
+        textSelection.start,
+        textSelection.end,
+        myText,
+      );
+      final myTextLength = myText.length;
+      bromotionController!.text = newText;
+      bromotionController!.selection = textSelection.copyWith(
+        baseOffset: textSelection.start + myTextLength,
+        extentOffset: textSelection.start + myTextLength,
+      );
+      rememberPosition = bromotionController!.selection;
+    }
+    onEmojiPressed?.call(myText);
   }
 
   /// This function is called when we want to see if any of the recent emojis
@@ -330,20 +351,23 @@ class EmojiBoard extends State<EmojiKeyboard> {
   /// or as a replacement of the selection of the user.
   void insertText(String myText, int category) {
     addRecentEmoji(myText, category);
-    emojiScrollShowBottomBar(true);
-    final text = bromotionController!.text;
-    final textSelection = bromotionController!.selection;
-    final newText = text.replaceRange(
-      textSelection.start,
-      textSelection.end,
-      myText,
-    );
-    final myTextLength = myText.length;
-    bromotionController!.text = newText;
-    bromotionController!.selection = textSelection.copyWith(
-      baseOffset: textSelection.start + myTextLength,
-      extentOffset: textSelection.start + myTextLength,
-    );
+    if (bromotionController != null) {
+      emojiScrollShowBottomBar(true);
+      final text = bromotionController!.text;
+      final textSelection = bromotionController!.selection;
+      final newText = text.replaceRange(
+        textSelection.start,
+        textSelection.end,
+        myText,
+      );
+      final myTextLength = myText.length;
+      bromotionController!.text = newText;
+      bromotionController!.selection = textSelection.copyWith(
+        baseOffset: textSelection.start + myTextLength,
+        extentOffset: textSelection.start + myTextLength,
+      );
+    }
+    onEmojiPressed?.call(myText);
   }
 
   bool isPortrait() {
@@ -378,21 +402,25 @@ class EmojiBoard extends State<EmojiKeyboard> {
             CategoryBar(
                 key: categoryBarStateKey,
                 categoryHandler: categoryHandler,
+                showRecent: showRecent,
                 darkMode: darkMode),
             Stack(children: [
               EmojiPage(
                   key: emojiPageStateKey,
                   emojiKeyboardHeight: isPortrait() ? emojiKeyboardHeight : 150,
-                  bromotionController: bromotionController!,
+                  bromotionController: bromotionController,
                   emojiScrollShowBottomBar: emojiScrollShowBottomBar,
                   insertText: insertText,
-                  recent: recentEmojis,
+                  recent: showRecent ? recentEmojis : null,
                   switchedPage: switchedPage),
               BottomBar(
-                  key: bottomBarStateKey,
-                  bromotionController: bromotionController!,
-                  emojiSearch: emojiSearch,
-                  darkMode: darkMode),
+                key: bottomBarStateKey,
+                bromotionController: bromotionController,
+                onBackPressed: onBackPressed,
+                emojiSearch: emojiSearch,
+                darkMode: darkMode,
+                showSpacebar: showSpacebar,
+              ),
             ])
           ]),
         ),

@@ -26,11 +26,11 @@ class EmojiPage extends StatefulWidget {
       : super(key: key);
 
   final double emojiKeyboardHeight;
-  final TextEditingController bromotionController;
+  final TextEditingController? bromotionController;
   final Function(bool) emojiScrollShowBottomBar;
   final Function(String, int) insertText;
   final Function(int) switchedPage;
-  final List<String> recent;
+  final List<String>? recent;
 
   @override
   EmojiPageState createState() => EmojiPageState();
@@ -242,8 +242,8 @@ class EmojiPageState extends State<EmojiPage> {
     return Container(
       height: widget.emojiKeyboardHeight - 50,
       child: PageView(controller: pageController, children: [
-        EmojiGrid(
-            emojis: widget.recent,
+        if (widget.recent != null) EmojiGrid(
+            emojis: widget.recent!,
             emojiScrollShowBottomBar: widget.emojiScrollShowBottomBar,
             categoryIndicator: 0,
             insertText: widget.insertText),

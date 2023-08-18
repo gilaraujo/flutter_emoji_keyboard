@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 
 /// This is the Bottom Bar of the Emoji Keyboard
 class BottomBar extends StatefulWidget {
-  final TextEditingController bromotionController;
+  final TextEditingController? bromotionController;
+  final VoidCallback? onBackPressed;
   final Function emojiSearch;
   final bool darkMode;
+  final bool showSpacebar;
 
   BottomBar(
       {Key? key,
       required this.bromotionController,
       required this.emojiSearch,
-      required this.darkMode})
+      this.onBackPressed,
+      required this.darkMode,
+      this.showSpacebar = true,})
       : super(key: key);
 
   @override
@@ -27,10 +31,12 @@ class BottomBarState extends State<BottomBar> {
   TextEditingController? bromotionController;
   final double bottomBarHeight = 50;
   bool showBottomBar = true;
+  late VoidCallback? onBackPressed;
 
   @override
   void initState() {
     this.bromotionController = widget.bromotionController;
+    this.onBackPressed = widget.onBackPressed;
     super.initState();
   }
 
@@ -44,57 +50,60 @@ class BottomBarState extends State<BottomBar> {
   /// if the user has the cursor in the beginning or nothing is in the
   /// Textfield nothing happens
   void onBackspace() {
-    final text = bromotionController!.text;
-    final textSelection = bromotionController!.selection;
-    final selectionLength = textSelection.end - textSelection.start;
-    if (selectionLength > 0) {
+    if (bromotionController != null) {
+      final text = bromotionController!.text;
+      final textSelection = bromotionController!.selection;
+      final selectionLength = textSelection.end - textSelection.start;
+      if (selectionLength > 0) {
+        final newText = text.replaceRange(
+          textSelection.start,
+          textSelection.end,
+          '',
+        );
+        bromotionController!.text = newText;
+        bromotionController!.selection = textSelection.copyWith(
+          baseOffset: textSelection.start,
+          extentOffset: textSelection.start,
+        );
+        return;
+      }
+
+      if (textSelection.start == 0) {
+        if (text.length == 0) {
+          return;
+        } else {
+          // Eagerly selects all but the last count characters
+          String finalCharacter = text.characters.skipLast(1).string;
+          // So if the result is empty there was only 1 character
+          if (finalCharacter == "") {
+            // If there was only 1 character we remove that one.
+            bromotionController!.text = "";
+            bromotionController!.selection = textSelection.copyWith(
+              baseOffset: 0,
+              extentOffset: 0,
+            );
+            return;
+          }
+        }
+      }
+
+      String firstSection = text.substring(0, textSelection.start);
+      String newFirstSection = firstSection.characters.skipLast(1).string;
+      final offset = firstSection.length - newFirstSection.length;
+      final newStart = textSelection.start - offset;
+      final newEnd = textSelection.start;
       final newText = text.replaceRange(
-        textSelection.start,
-        textSelection.end,
+        newStart,
+        newEnd,
         '',
       );
       bromotionController!.text = newText;
       bromotionController!.selection = textSelection.copyWith(
-        baseOffset: textSelection.start,
-        extentOffset: textSelection.start,
+        baseOffset: newStart,
+        extentOffset: newStart,
       );
-      return;
     }
-
-    if (textSelection.start == 0) {
-      if (text.length == 0) {
-        return;
-      } else {
-        // Eagerly selects all but the last count characters
-        String finalCharacter = text.characters.skipLast(1).string;
-        // So if the result is empty there was only 1 character
-        if (finalCharacter == "") {
-          // If there was only 1 character we remove that one.
-          bromotionController!.text = "";
-          bromotionController!.selection = textSelection.copyWith(
-            baseOffset: 0,
-            extentOffset: 0,
-          );
-          return;
-        }
-      }
-    }
-
-    String firstSection = text.substring(0, textSelection.start);
-    String newFirstSection = firstSection.characters.skipLast(1).string;
-    final offset = firstSection.length - newFirstSection.length;
-    final newStart = textSelection.start - offset;
-    final newEnd = textSelection.start;
-    final newText = text.replaceRange(
-      newStart,
-      newEnd,
-      '',
-    );
-    bromotionController!.text = newText;
-    bromotionController!.selection = textSelection.copyWith(
-      baseOffset: newStart,
-      extentOffset: newStart,
-    );
+    onBackPressed?.call();
   }
 
   /// If the user presses the Spacebar it will simply add a space
@@ -153,7 +162,7 @@ class BottomBarState extends State<BottomBar> {
                             widget.emojiSearch();
                           },
                           child: Icon(Icons.search))),
-                  SizedBox(
+                  if (widget.showSpacebar) SizedBox(
                       width: (MediaQuery.of(context).size.width / 8) * 3,
                       height: MediaQuery.of(context).size.width / 8,
                       child: TextButton(

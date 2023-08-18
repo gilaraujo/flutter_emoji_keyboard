@@ -4,10 +4,11 @@ import 'emoji_category_key.dart';
 /// This is the Category bar. Here the user can select any of the 9 categories
 class CategoryBar extends StatefulWidget {
   final Function(int) categoryHandler;
+  final bool showRecent;
   final bool darkMode;
 
   const CategoryBar(
-      {Key? key, required this.categoryHandler, required this.darkMode})
+      {Key? key, required this.categoryHandler, required this.showRecent, required this.darkMode})
       : super(key: key);
 
   @override
@@ -64,7 +65,7 @@ class CategoryBarState extends State<CategoryBar> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            EmojiCategoryKey(
+            if (widget.showRecent) EmojiCategoryKey(
               onCategorySelect: onCategorySelect,
               category: Icons.access_time,
               categoryNumber: 0,
@@ -73,50 +74,50 @@ class CategoryBarState extends State<CategoryBar> {
             EmojiCategoryKey(
               onCategorySelect: onCategorySelect,
               category: Icons.tag_faces,
-              categoryNumber: 1,
-              active: categorySelected == 1,
+              categoryNumber: widget.showRecent ? 1 : 0,
+              active: categorySelected == (widget.showRecent ? 1 : 0),
             ),
             EmojiCategoryKey(
               onCategorySelect: onCategorySelect,
               category: Icons.pets,
-              categoryNumber: 2,
-              active: categorySelected == 2,
+              categoryNumber: widget.showRecent ? 2 : 1,
+              active: categorySelected == (widget.showRecent ? 2 : 1),
             ),
             EmojiCategoryKey(
               onCategorySelect: onCategorySelect,
               category: Icons.fastfood,
-              categoryNumber: 3,
-              active: categorySelected == 3,
+              categoryNumber: widget.showRecent ? 3 : 2,
+              active: categorySelected == (widget.showRecent ? 3 : 2),
             ),
             EmojiCategoryKey(
               onCategorySelect: onCategorySelect,
               category: Icons.sports_soccer,
-              categoryNumber: 4,
-              active: categorySelected == 4,
+              categoryNumber: widget.showRecent ? 4 : 3,
+              active: categorySelected == (widget.showRecent ? 4 : 3),
             ),
             EmojiCategoryKey(
               onCategorySelect: onCategorySelect,
               category: Icons.directions_car,
-              categoryNumber: 5,
-              active: categorySelected == 5,
+              categoryNumber: widget.showRecent ? 5 : 4,
+              active: categorySelected == (widget.showRecent ? 5 : 4),
             ),
             EmojiCategoryKey(
               onCategorySelect: onCategorySelect,
               category: Icons.lightbulb_outline,
-              categoryNumber: 6,
-              active: categorySelected == 6,
+              categoryNumber: widget.showRecent ? 6 : 5,
+              active: categorySelected == (widget.showRecent ? 6 : 5),
             ),
             EmojiCategoryKey(
               onCategorySelect: onCategorySelect,
               category: Icons.euro_symbol,
-              categoryNumber: 7,
-              active: categorySelected == 7,
+              categoryNumber: widget.showRecent ? 7 : 6,
+              active: categorySelected == (widget.showRecent ? 7 : 6),
             ),
             EmojiCategoryKey(
               onCategorySelect: onCategorySelect,
               category: Icons.flag,
-              categoryNumber: 8,
-              active: categorySelected == 8,
+              categoryNumber: widget.showRecent ? 8 : 7,
+              active: categorySelected == (widget.showRecent ? 8 : 7),
             ),
           ],
         ),

@@ -89,7 +89,14 @@ class _MyHomePageState extends State<MyHomePage> {
         Align(
           alignment: Alignment.bottomCenter,
           child: EmojiKeyboard(
-              emotionController: controller,
+              // emotionController: controller,
+              onEmojiPressed: (text) {
+                int i = 0;
+              },
+              onBackPressed: () {
+                int i = 0;
+              },
+              showSpacebar: false,
               emojiKeyboardHeight: 400,
               showEmojiKeyboard: showEmojiKeyboard,
               darkMode: true),
