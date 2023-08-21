@@ -246,49 +246,49 @@ class EmojiPageState extends State<EmojiPage> {
         if (widget.recent != null) EmojiGrid(
             emojis: widget.recent!,
             emojiScrollShowBottomBar: widget.emojiScrollShowBottomBar,
-            categoryIndicator: 0,
+            categoryIndicator: widget.recent != null ? 0 : 1,
             insertText: widget.insertText),
         EmojiGrid(
             key: emojiGridStateKey,
             emojis: smileys,
             emojiScrollShowBottomBar: widget.emojiScrollShowBottomBar,
-            categoryIndicator: 1,
+            categoryIndicator: widget.recent != null ? 1 : 2,
             insertText: widget.insertText,
             available: availableSmileys),
         EmojiGrid(
             emojis: animals,
             emojiScrollShowBottomBar: widget.emojiScrollShowBottomBar,
-            categoryIndicator: 2,
+            categoryIndicator: widget.recent != null ? 2 : 3,
             insertText: widget.insertText),
         EmojiGrid(
             emojis: foods,
             emojiScrollShowBottomBar: widget.emojiScrollShowBottomBar,
-            categoryIndicator: 3,
+            categoryIndicator: widget.recent != null ? 3 : 4,
             insertText: widget.insertText),
         EmojiGrid(
             emojis: activities,
             emojiScrollShowBottomBar: widget.emojiScrollShowBottomBar,
-            categoryIndicator: 4,
+            categoryIndicator: widget.recent != null ? 4 : 5,
             insertText: widget.insertText),
         EmojiGrid(
             emojis: travel,
             emojiScrollShowBottomBar: widget.emojiScrollShowBottomBar,
-            categoryIndicator: 5,
+            categoryIndicator: widget.recent != null ? 5 : 6,
             insertText: widget.insertText),
         EmojiGrid(
             emojis: objects,
             emojiScrollShowBottomBar: widget.emojiScrollShowBottomBar,
-            categoryIndicator: 6,
+            categoryIndicator: widget.recent != null ? 6 : 7,
             insertText: widget.insertText),
         EmojiGrid(
             emojis: symbols,
             emojiScrollShowBottomBar: widget.emojiScrollShowBottomBar,
-            categoryIndicator: 7,
+            categoryIndicator: widget.recent != null ? 7 : 8,
             insertText: widget.insertText),
         EmojiGrid(
             emojis: flags,
             emojiScrollShowBottomBar: widget.emojiScrollShowBottomBar,
-            categoryIndicator: 8,
+            categoryIndicator: widget.recent != null ? 8 : 9,
             insertText: widget.insertText)
       ]),
     );

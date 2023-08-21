@@ -105,7 +105,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
         }
       }
 
-      if (recent.isEmpty) {
+      if (showRecent && recent.isEmpty) {
         categoryHandler(1);
         switchedPage(1);
       } else {
