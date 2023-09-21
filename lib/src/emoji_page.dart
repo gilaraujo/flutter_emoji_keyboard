@@ -86,7 +86,7 @@ class EmojiPageState extends State<EmojiPage> {
     availableSmileys = List.filled(smileyList.length, false, growable: false);
     for (int i = 0; i < smileyList.length; i++) {
       if (componentsMap.containsKey(smileyList[i])) {
-        if (Platform.isAndroid) {
+        if (!kIsWeb && Platform.isAndroid) {
           List<String> components = [];
           // We are checking if the components are able to be drawn by Android.
           components.addAll(componentsMap[smileyList[i]]);

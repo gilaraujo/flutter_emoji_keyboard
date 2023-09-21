@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:emoji_keyboard_flutter/src/util/emoji.dart';
 import 'package:emoji_keyboard_flutter/src/util/storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -322,7 +323,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
   /// This function is called when we want to see if any of the recent emojis
   /// that the user used can be shown in this Android version.
   isAvailable(recentEmojis) {
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       Future.wait([getAvailableEmojis(recentEmojis)]).then((var value) {
         setState(() {});
       });

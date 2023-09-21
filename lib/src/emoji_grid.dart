@@ -1,5 +1,6 @@
 import 'package:emoji_keyboard_flutter/src/emoji/component/component.dart';
 import 'package:emoji_keyboard_flutter/src/util/popup_menu_override.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -152,7 +153,7 @@ class EmojiGridState extends State<EmojiGrid> {
     components.addAll(componentsMap[emoji]);
 
     List<String> finalComponents = [];
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       var availableEmojis =
           await platform.invokeMethod("isAvailable", {"emojis": components});
 
