@@ -28,6 +28,7 @@ class EmojiKeyboard extends StatefulWidget {
   final bool showRecent;
   final bool darkMode;
   final bool showSpacebar;
+  final bool dbEnabled;
 
   EmojiKeyboard(
       {Key? key,
@@ -39,6 +40,7 @@ class EmojiKeyboard extends StatefulWidget {
       this.showRecent = true,
       this.darkMode = false,
       this.showSpacebar = true,
+      this.dbEnabled = true,
       })
       : super(key: key);
 
@@ -83,7 +85,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
   List<Emoji> recent = [];
   List<String> recentEmojis = [];
 
-  Storage storage = Storage();
+  Storage? storage;
 
   @override
   void initState() {
@@ -94,8 +96,11 @@ class EmojiBoard extends State<EmojiKeyboard> {
     this.showRecent = widget.showRecent;
     this.darkMode = widget.darkMode;
     this.showSpacebar = widget.showSpacebar;
+    if (widget.dbEnabled) {
+      storage = Storage();
+    }
 
-    storage.fetchAllEmojis().then((emojis) {
+    storage?.fetchAllEmojis().then((emojis) {
       if (emojis.isNotEmpty) {
         recent = emojis;
         recent.sort((a, b) => b.amount.compareTo(a.amount));
@@ -250,7 +255,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
       // The emoji is already in the list so we want to update it.
       Emoji currentEmoji = recent.firstWhere((emote) => emote.emoji == emoji);
       currentEmoji.increase();
-      storage.updateEmoji(currentEmoji).then((value) {
+      storage?.updateEmoji(currentEmoji).then((value) {
         recent.sort((a, b) => b.amount.compareTo(a.amount));
         setState(() {
           recentEmojis = recent.map((emote) => emote.emoji).toList();
@@ -258,7 +263,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
       });
     } else {
       Emoji newEmoji = Emoji(emoji, 1);
-      storage.addEmoji(newEmoji).then((emotion) {
+      storage?.addEmoji(newEmoji).then((emotion) {
         recent.add(newEmoji);
         recent.sort((a, b) => b.amount.compareTo(a.amount));
         setState(() {
@@ -277,7 +282,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
       // The emoji is already in the list so we want to update it.
       Emoji currentEmoji = recent.firstWhere((emote) => emote.emoji == emoji);
       currentEmoji.increase();
-      storage.updateEmoji(currentEmoji).then((value) {
+      storage?.updateEmoji(currentEmoji).then((value) {
         recent.sort((a, b) => b.amount.compareTo(a.amount));
         setState(() {
           recentEmojis = recent.map((emote) => emote.emoji).toList();
@@ -285,7 +290,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
       });
     } else {
       Emoji newEmoji = Emoji(emoji, 1);
-      storage.addEmoji(newEmoji).then((emotion) {
+      storage?.addEmoji(newEmoji).then((emotion) {
         recent.add(newEmoji);
         recent.sort((a, b) => b.amount.compareTo(a.amount));
         setState(() {

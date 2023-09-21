@@ -101,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
             showEmojiKeyboard: showEmojiKeyboard,
             darkMode: true,
             showRecent: false,
+            dbEnabled: true,
           ),
         ),
       ]),
