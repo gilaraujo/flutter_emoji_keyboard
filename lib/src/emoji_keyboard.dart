@@ -56,7 +56,7 @@ class EmojiBoard extends State<EmojiKeyboard> {
   /// This function will see if it can be shown in the Android version
   /// that the user is currently using.
   /// (See MainActivity in the android project for the implementation)
-  static const platform = const MethodChannel("nl.brocast.emoji/available");
+  static const platform = const MethodChannel("nl.emojikeyboard.emoji/available");
 
   final GlobalKey<CategoryBarState> categoryBarStateKey =
       GlobalKey<CategoryBarState>();
