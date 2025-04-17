@@ -12,7 +12,7 @@ dependencies:
   back_button_interceptor: ^6.0.0
   sqflite: ^2.0.1
   path: ^1.8.0
-  flutter_keyboard_visibility: ^5.1.0
+  flutter_keyboard_visibility: ^6.0.0
 
   flutter:
     sdk: flutter
