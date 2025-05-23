@@ -127,7 +127,9 @@ class EmojiBoard extends State<EmojiKeyboard> {
         if (searchMode) {
           searchMode = false;
           Future.delayed(const Duration(milliseconds: 100), () {
-            setState(() {});
+            if (mounted) {
+              setState(() {});
+            }
           });
         }
       }
